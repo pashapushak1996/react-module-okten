@@ -1,0 +1,21 @@
+ul {
+    margin: 0;
+    padding: 0;
+}
+
+li {
+    list-style: none;
+}
+
+.menu {
+    margin: 10px;
+}
+
+.menu > ul {
+    display: flex;
+    margin: 0 -10px;
+}
+
+.menu > ul > li {
+    margin: 0px 10px;
+}
