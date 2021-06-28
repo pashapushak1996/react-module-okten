@@ -1,4 +1,4 @@
-import {Link, Route, Switch} from "react-router-dom";
+import {Link, Route} from "react-router-dom";
 import FullPost from "../full-post/FullPost";
 import {useState} from "react";
 
@@ -21,8 +21,14 @@ const Post = ({url, post}) => {
                 to={ `${ url }/${ post.id }` }>
                 View full post
             </Link>
+            {
+                isVisible && <div style={ style }>
+                    <Route path={ `${ url }/:postId` } render={ (props) =>
+                        <FullPost { ...props }/>
+                    }/>
+                </div>
+            }
             <hr/>
-
         </div>
     );
 }
