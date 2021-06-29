@@ -3,7 +3,7 @@ import {getUser} from "../../services/API";
 import {setUser} from "../../store/reducer";
 
 const FullUserInfo = ({match: {params: {id}}, user, dispatch}) => {
-
+//todo render adress and company
 
     useEffect(() => {
         getUser(id).then(data => dispatch(setUser(data)));

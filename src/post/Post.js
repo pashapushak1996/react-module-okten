@@ -6,7 +6,10 @@ import Comments from "../components/comments/Comments";
 import Comment from "../components/comment/Comment";
 
 const Post = ({post, url, dispatch, comments}) => {
+    //todo реалізувати перехід з коментаря на повну версію коментаря
+
     const [isVisible, setIsVisible] = useState(false);
+
 
     const toggleIsVisible = () => {
         isVisible ? setIsVisible(false) : setIsVisible(true);
