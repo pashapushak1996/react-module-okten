@@ -1,62 +1,62 @@
 // створити посилання /users, /posts, /comments.
-//     При переході на посилання відображати інформацію з jsonplaceholder про users/posts/comments відповідно до посилання за логікою.
-//     Для всього використовувати окремий компонент (Users->User, Posts->Post).
-//     В компоненті user та post зробити кнопки. При натисканні на які відображаються пости юзера (а в постах коментарі поста. Але не в постах юзера, а за урлою /posts)
+// При переході на посилання відображати інформацію з jsonplaceholder про users/posts/comments відповідно до посилання за логікою.
+// Для всього використовувати окремий компонент (Users->User, Posts->Post).
+// В компоненті user та post comment зробити Link. При натисканні на які відображається детальна інформація про user/post/comment
 
-import React, {useEffect, useReducer} from "react";
-import {setUsers, initialState, reducer, setPosts} from "./store/reducer";
-import {BrowserRouter as Router, Route, Link, Switch} from "react-router-dom";
-import {getPosts, getUsers} from "./services/API";
+import React, {useReducer} from "react";
+import {initialState, reducer} from "./store";
+import {Link, Route, Switch} from "react-router-dom";
 import Users from "./components/users/Users";
 import FullUserInfo from "./components/full-user-info/FullUserInfo";
 import Posts from "./components/posts/Posts";
 import Comments from "./components/comments/Comments";
+import FullComment from "./components/full-comment/FullComment";
+import styles from './App.module.css';
+
+export const Context = React.createContext({});
 
 
 const App = () => {
 
-    let [state, dispatch] = useReducer(reducer, initialState);
-
-    useEffect(() => {
-        getUsers().then(data => {
-            dispatch(setUsers(data));
-        });
-        getPosts().then(data => {
-            dispatch(setPosts(data));
-        });
-
-    }, []);
+    const [state, dispatch] = useReducer(reducer, initialState);
 
 
     return (
-        <Router>
-            <nav style={ {width: "400px", display: "flex", justifyContent: "space-between"} }>
-                <div>
-                    <Link to={ `/users` }>Users</Link>
-                </div>
-                <div>
-                    <Link to={ `/posts` }>Posts</Link>
-                </div>
-            </nav>
-            <hr/>
-            <Switch>
-                <Route path={ `/posts/:id/comments` } render={ (props) => {
-                    return <Comments comments={ state.comments } dispatch={ dispatch } { ...props }/>
-                } }/>
-                <Route path={ `/posts` }
-                       render={ (props) =>
-                           <Posts dispatch={ dispatch } { ...props } comments={ state.comments }
-                                  posts={ state.posts }/> }/>
-                <Route path={ `/users/:id` }
-                       render={ (props) =>
-                           <FullUserInfo dispatch={ dispatch } user={ state.user } { ...props }/> }/>
-                <Route path={ `/users` }
-                       render={ (props) =>
-                           <Users { ...props } users={ state.users }/> }/>
-            </Switch>
+        <Context.Provider value={ {state, dispatch} }>
+            <div>
+                <nav className={ styles.menu }>
+                    <div>
+                        <Link className={ styles.menu__link } to={ `/users` }>Users</Link>
+                    </div>
+                    <div>
+                        <Link className={ styles.menu__link } to={ `/posts` }>Posts</Link>
+                    </div>
+                </nav>
+                <hr/>
+                <Switch>
+                    <Route path={ `/posts/:postId/comments/:commentsId` } render={ (props) => {
+                        return <FullComment { ...props }/>
+                    } }/>
+                    <Route path={ `/posts/:id/comments` } render={ (props) => {
+                        return <Comments comments={ state.comments } dispatch={ dispatch } { ...props }/>
+                    } }/>
 
-        </Router>
-    );
+                    <Route path={ `/posts` }
+                           render={ (props) =>
+                               <Posts dispatch={ dispatch } { ...props }/> }/>
+
+                    <Route path={ `/users/:id` }
+                           render={ (props) =>
+                               <FullUserInfo dispatch={ dispatch } user={ state.user } { ...props }/> }/>
+
+                    <Route path={ `/users` }
+                           render={ (props) =>
+                               <Users { ...props } dispatch={ dispatch } users={ state.users }/> }/>
+                </Switch>
+            </div>
+        </Context.Provider>
+    )
+        ;
 }
 
 export default App;

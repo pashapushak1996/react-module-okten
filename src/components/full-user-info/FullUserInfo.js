@@ -1,13 +1,24 @@
+import {setUser} from "../../store";
+import {getUser} from "../../services";
 import {useEffect} from "react";
-import {getUser} from "../../services/API";
-import {setUser} from "../../store/reducer";
+import Address from "../full-comment/Address";
 
 const FullUserInfo = ({match: {params: {id}}, user, dispatch}) => {
-//todo render adress and company
+
+
+//First solution of routing
 
     useEffect(() => {
         getUser(id).then(data => dispatch(setUser(data)));
     }, [id]);
+
+    //Second solution of routing
+
+    //Можна в Link кидати ключ state а значення любе і відловлювати в Location
+
+    // const {state} = useLocation();
+    // console.log(state);
+
 
     return (
         <div>
@@ -32,6 +43,10 @@ const FullUserInfo = ({match: {params: {id}}, user, dispatch}) => {
                 <div>
                     <b>Website: </b>
                     <span>{ user.website }</span>
+                </div>
+                <div>
+                    <h2>Address: </h2>
+                    <Address items={ [Object.keys(user.address), user.address] }/>
                 </div>
             </div> }
         </div>

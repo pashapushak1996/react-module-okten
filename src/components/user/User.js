@@ -1,16 +1,19 @@
 import {useState} from "react";
-import {getPosts} from "../../services/API";
+import {getPosts} from "../../services";
 import {Link} from "react-router-dom";
 
-const User = ({id, name, url}) => {
+const User = ({id, name, url, user}) => {
+
+
     const [isVisible, setIsVisible] = useState(false);
+
 
     const [userPosts, setUserPosts] = useState([]);
 
 
     const toggleIsVisible = () => {
         isVisible ? setIsVisible(false) : setIsVisible(true);
-    }
+    };
 
     const getUserPosts = () => {
         getPosts().then(data => {
@@ -35,12 +38,20 @@ const User = ({id, name, url}) => {
                 toggleIsVisible();
             } }>User Posts
             </button>
-            <Link to={ `${ url }/${ id }` }>
+            <Link to={ {
+                pathname: `${ url }/${ id }`,
+                state: user
+            } }>
                 <button>Full User Info</button>
             </Link>
             <hr/>
             { isVisible && userPosts.map((post) => {
-                return <div key={ post.id }>{ post.title }</div>
+                return <div key={ post.id }>
+                    <div>
+                        <b>Title:</b>
+                        <span>{ post.title }</span>
+                    </div>
+                </div>
             }) }
             <hr/>
         </div>

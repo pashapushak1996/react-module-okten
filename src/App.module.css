@@ -1,0 +1,11 @@
+.menu {
+    width: 500px;
+    display: flex;
+    justify-content: space-between;
+
+}
+
+.menu__link {
+    text-decoration: none;
+    color: darkcyan;
+}

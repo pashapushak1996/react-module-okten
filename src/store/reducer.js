@@ -48,4 +48,4 @@ const reducer = (state, action) => {
 export {
     initialState,
     reducer
-}
+};

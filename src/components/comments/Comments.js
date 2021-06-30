@@ -16,7 +16,7 @@ const Comments = ({match: {params: {id}}, comments, dispatch}) => {
     return (
         <div>
             { comments && comments.map((comment) => {
-                return <Comment id={ comment.id }
+                return <Comment commentId={ comment.id }
                                 key={ comment.id }
                                 body={ comment.body }
                                 name={ comment.name }

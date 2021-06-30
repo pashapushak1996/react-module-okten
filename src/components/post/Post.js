@@ -1,13 +1,13 @@
 import {Link, Route} from "react-router-dom";
-import {getComments} from "../services/API";
+import {getComments} from "../../services/API";
 import React, {useState} from "react";
-import {setComments} from "../store/reducer";
-import Comments from "../components/comments/Comments";
-import Comment from "../components/comment/Comment";
+import {setComments} from "../../store/reducer";
+import Comments from "../comments/Comments";
+import Comment from "../comment/Comment";
 
 const Post = ({post, url, dispatch, comments}) => {
     //todo реалізувати перехід з коментаря на повну версію коментаря
-
+    console.log(url);
     const [isVisible, setIsVisible] = useState(false);
 
 
@@ -19,6 +19,8 @@ const Post = ({post, url, dispatch, comments}) => {
         const postComments = await getComments();
         dispatch(setComments(postComments))
     }
+
+
     return (
         <div>
             <div>
@@ -43,14 +45,18 @@ const Post = ({post, url, dispatch, comments}) => {
                 isVisible && <div>
                     <h2>All comments</h2>
                     { comments.map((comment) => {
-                        if (comment.postId == post.id) {
-                            return <Comment id={ comment.id } key={ comment.id } email={ comment.email }/>
+                        if (comment.postId === post.id) {
+                            console.log(url);
+                            return <Comment commentId={ comment.id }
+                                            postId={ post.id }
+                                            url={ url } key={ comment.id }
+                                            email={ comment.email }
+                                            comment={ comment }/>
                         }
                         return null;
                     }) }
                 </div>
             }
-
             <hr/>
         </div>
     );

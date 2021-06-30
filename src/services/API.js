@@ -20,6 +20,10 @@ const getComments = async () => {
     const {data} = await axiosInstance.get(`/comments`);
     return data;
 };
+const getComment = async (id) => {
+    const {data} = await axiosInstance.get(`/comments/${ id }`);
+    return data;
+}
 const getPostComments = async (id) => {
     const {data} = await axiosInstance.get(`/posts/${ id }/comments`);
     return data;
