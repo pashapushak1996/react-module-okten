@@ -1,5 +1,8 @@
 import React from "react";
-
+import styles from './App.css';
+import {NavLink, Route, Switch} from "react-router-dom";
+import Users from "./components/users/Users";
+import Posts from "./components/posts/Posts";
 // #route #routing #dynamic
 // створити посилання /users,
 //     При переході на посилання відображати інформацію з jsonplaceholder про users
@@ -10,7 +13,18 @@ import React from "react";
 const App = () => {
     return (
         <div>
+            <nav>
+                <div>
+                    <NavLink activeClassName={ styles.active } to={ `/users` }>Users</NavLink>
+                </div>
+            </nav>
+            <Switch>
+                <Route exact path={ `/users` }
+                       render={ (props) => <Users { ...props }/> }/>
 
+                <Route path={ `/users/:id/posts` }
+                       render={ (props) => <Posts { ...props }/> }/>
+            </Switch>
         </div>
     );
 }
