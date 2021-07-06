@@ -1,19 +1,21 @@
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react";
-import {getUsers} from "../../services/users.service";
-import {useRouteMatch} from "react-router-dom";
-import {User} from "./User";
+import {getUsers} from "../../services/users-service";
+import {setUsers} from "../../redux/reducers/users-reducer";
+import {User} from "../user/User";
 
 export const Users = () => {
-    let {url} = useRouteMatch();
     const dispatch = useDispatch();
     const users = useSelector(({usersReducer: {users}}) => users);
+
     useEffect(() => {
-        getUsers().then(data => dispatch({type: `ADD_USERS`, payload: data}));
-    }, [])
+        getUsers().then(data => dispatch(setUsers(data)));
+    }, []);
+
     return (
         <div>
-            { users.map((user) => <User key={ user.id } url={ url } user={ user }/>) }
+            <h1>USERS LIST: </h1>
+            { users.map((user) => <User key={ user.id } item={ user }/>) }
         </div>
     );
 }

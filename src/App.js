@@ -1,34 +1,30 @@
 import React from "react";
 import {Link, Route} from "react-router-dom";
 import {Users} from "./components/users/Users";
-import {Posts} from "./components/posts/Posts";
-import {UserInfo} from "./components/users/UserInfo";
+import {useSelector} from "react-redux";
+import {UserInfo} from "./components/user-info/UserInfo";
+import {EditUserForm} from "./components/edit-user/EditUserForm";
 
-// ДЗ-
-// 1 дописати каунтер (декремент, ресет, інкремент кастом)
-//
-// 2 берем джейсон плейсхолдер + реакт роутер і тягнем дані на кожну сторінку)
-
-//posts
-//post
 
 const App = () => {
+    const {user, isUserVisible, isEditUser} = useSelector(({usersReducer: {user, isUserVisible, isEditUser}}) =>
+        ({user, isUserVisible, isEditUser}));
+
     return (
         <div>
             <nav>
                 <div>
                     <Link to={ `/users` }>Users</Link>
                 </div>
-                <div>
-                    <Link to={ `/posts` }>Posts</Link>
-                </div>
             </nav>
             <hr/>
-            <div>
-                <Route exact path={ `/posts` } render={ (props) => <Posts/> }/>
-                <Route path={ `/users` } render={ (props) => <Users { ...props }/> }/>
-                <Route exact path={ `/users/:id` } render={ (props) => <UserInfo { ...props }/> }/>
+            <div style={ {display: 'flex', columnGap: "25px"} }>
+                <Route path={ `/users` } render={ (props) => <Users/>
+                }/>
+                { isUserVisible && <UserInfo user={ user }/> }
+                { isEditUser && <EditUserForm user={ user }/> }
             </div>
+
         </div>
     );
 }
