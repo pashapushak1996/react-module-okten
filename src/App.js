@@ -1,14 +1,17 @@
-import React from "react";
+import React, {useState} from "react";
 import {Link, Route} from "react-router-dom";
 import {Users} from "./components/users/Users";
 import {useSelector} from "react-redux";
 import {UserInfo} from "./components/user-info/UserInfo";
 import {EditUserForm} from "./components/edit-user/EditUserForm";
+import {CreateUserForm} from "./components/create-user-form/CreateUserForm";
 
+//todo зробити щоб воно  не мутувало початковий масив
 
 const App = () => {
-    const {user, isUserVisible, isEditUser} = useSelector(({usersReducer: {user, isUserVisible, isEditUser}}) =>
-        ({user, isUserVisible, isEditUser}));
+    const [isEditUser, setIsEditUser] = useState(false);
+    const [isCreateUser, setIsCreateUser] = useState(false);
+    const {user, isUserVisible} = useSelector(({usersReducer}) => usersReducer);
 
     return (
         <div>
@@ -19,12 +22,15 @@ const App = () => {
             </nav>
             <hr/>
             <div style={ {display: 'flex', columnGap: "25px"} }>
-                <Route path={ `/users` } render={ (props) => <Users/>
-                }/>
-                { isUserVisible && <UserInfo user={ user }/> }
-                { isEditUser && <EditUserForm user={ user }/> }
+                <Route path={ `/users` } render={ (props) => <Users/> }/>
+                { isUserVisible && <UserInfo setIsEditUser={ setIsEditUser } user={ user }/> }
+                { isEditUser && <EditUserForm setIsEditUser={ setIsEditUser } user={ user }/> }
+                { isCreateUser && <CreateUserForm setIsCreateUser={ setIsCreateUser }/> }
             </div>
-
+            <button onClick={ () => {
+                setIsCreateUser(!isCreateUser);
+            } }>Create User
+            </button>
         </div>
     );
 }

@@ -1,5 +1,6 @@
 import {useDispatch} from "react-redux";
-import {setUser} from "../../redux/reducers/users-reducer";
+import {setUser} from "../../redux";
+
 
 export const User = ({item}) => {
     const dispatch = useDispatch();

@@ -1,21 +1,17 @@
-//Action types
-const SET_USERS = "SET_USERS";
-const SET_USER = "SET_USER";
-const DELETE_USER = "DELETE_USER";
-const EDIT_USER = "EDIT_USER";
+import {
+    SET_USERS,
+    SET_USER,
+    DELETE_USER,
+    EDIT_USER,
+    UPDATE_USER,
+    CREATE_USER
+} from "../../action-types";
 
-
-//Action creators
-export const setUsers = (payload) => ({type: SET_USERS, payload});
-export const setUser = (payload) => ({type: SET_USER, payload});
-export const deleteUser = (payload) => ({type: DELETE_USER, payload});
-export const editUser = (payload) => ({type: EDIT_USER, payload});
 
 const initialState = {
     users: [],
     user: null,
     isUserVisible: false,
-    isEditUser: false,
 };
 
 export const usersReducer = (state = initialState, action) => {
@@ -38,6 +34,22 @@ export const usersReducer = (state = initialState, action) => {
             return {
                 ...state,
                 isEditUser: !state.isEditUser,
+            }
+        }
+        case UPDATE_USER: {
+            return {
+                ...state, users: state.users.reduce((acc, curr) => {
+                    if (curr.id === action.payload.id) {
+                        curr = action.payload.user
+                    }
+                    acc.push(curr);
+                    return acc;
+                }, [])
+            }
+        }
+        case CREATE_USER: {
+            return {
+                ...state, users: [...state.users, action.payload]
             }
         }
 

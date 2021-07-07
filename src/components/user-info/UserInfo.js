@@ -1,7 +1,8 @@
 import {useDispatch} from "react-redux";
-import {deleteUser} from "../../redux/reducers/users-reducer";
+import {deleteUser} from "../../redux/action-creators";
 
-export const UserInfo = ({user}) => {
+
+export const UserInfo = ({user, setIsEditUser}) => {
     const dispatch = useDispatch();
 
     return (
@@ -26,11 +27,12 @@ export const UserInfo = ({user}) => {
             </div>
             <div>
                 <button onClick={ () => {
-                    dispatch({type: "EDIT_USER"})
+                    setIsEditUser(true);
                 } }>Edit User
                 </button>
                 <button onClick={ () => {
-                    dispatch(deleteUser(user.id))
+                    dispatch(deleteUser(user.id));
+                    setIsEditUser(false);
                 } }>Delete User
                 </button>
             </div>

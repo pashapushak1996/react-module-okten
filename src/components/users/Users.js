@@ -1,8 +1,9 @@
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react";
 import {getUsers} from "../../services/users-service";
-import {setUsers} from "../../redux/reducers/users-reducer";
+
 import {User} from "../user/User";
+import {setUsers} from "../../redux";
 
 export const Users = () => {
     const dispatch = useDispatch();

@@ -1,6 +1,7 @@
 import {useForm} from "react-hook-form";
 import {useDispatch} from "react-redux";
-import {editUser, setUser} from "../../redux/reducers/users-reducer";
+import {setUser, updateUser} from "../../redux";
+
 
 const replaceFirstLetter = (string) => {
     string = string.split('');
@@ -8,34 +9,36 @@ const replaceFirstLetter = (string) => {
     return string.join('');
 }
 
-export const EditUserForm = ({user}) => {
+export const EditUserForm = ({user, setIsEditUser}) => {
+
     const dispatch = useDispatch();
 
     const {register, handleSubmit} = useForm();
-    const onSubmit = (data) => {
+
+    const onSubmit = (data, e) => {
+        console.log(e);
+        const editedUser = JSON.parse(JSON.stringify(user));
         Object.keys(data).forEach((key) => {
-            user[key] = data[key];
+            editedUser[key] = data[key];
         });
-        dispatch(setUser(user));
-        dispatch(editUser());
+        dispatch(setUser(editedUser));
+        dispatch(updateUser({id: user.id, user: editedUser}));
+        setIsEditUser(false);
     };
+
     return (
-        <div>
+        user && <div>
             <h1>EDIT USER</h1>
             <form onSubmit={ handleSubmit(onSubmit) }>
-                { Object.keys(user).map((key, index) => typeof user[key] !== "object" && key !== 'id' &&
+                { Object.keys(user).map((key) => typeof user[key] !== "object" && key !== 'id' &&
                     <div>
                         <b>{ replaceFirstLetter(key) }: </b>
-                        <input key={ key } defaultValue={ user[key] } { ...register(key) }/>
+                        <input defaultValue={ user[key] } { ...register(key) }/>
                     </div>
                 ) }
-                <button onClick={ () => {
-
-                } }>Save
-                </button>
+                <button type={ 'submit' }>Save</button>
             </form>
         </div>
-
     );
 }
 
