@@ -1,6 +1,6 @@
 import {useForm} from "react-hook-form";
 import {useDispatch} from "react-redux";
-import {createUser} from "../../redux/action-creators";
+import {createUser} from "../../redux/";
 
 
 export const CreateUserForm = ({setIsCreateUser}) => {

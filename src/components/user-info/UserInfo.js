@@ -1,5 +1,5 @@
 import {useDispatch} from "react-redux";
-import {deleteUser} from "../../redux/action-creators";
+import {deleteUser} from "../../redux";
 
 
 export const UserInfo = ({user, setIsEditUser}) => {
