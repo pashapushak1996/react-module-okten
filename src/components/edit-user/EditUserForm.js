@@ -15,8 +15,7 @@ export const EditUserForm = ({user, setIsEditUser}) => {
 
     const {register, handleSubmit} = useForm();
 
-    const onSubmit = (data, e) => {
-        console.log(e);
+    const onSubmit = (data) => {
         const editedUser = JSON.parse(JSON.stringify(user));
         Object.keys(data).forEach((key) => {
             editedUser[key] = data[key];
