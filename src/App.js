@@ -30,6 +30,7 @@ const App = () => {
         } catch (e) {
             console.log(e);
         } finally {
+            console.log('sss');
             setIsLoading(false);
         }
     }
