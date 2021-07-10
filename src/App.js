@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {createTodo, getTodos} from "./services";
+import {createTodo, getTodos, updateTodo} from "./services";
 import {setTodos} from "./redux/reducer";
 import {useDispatch, useSelector} from "react-redux";
 import {Todo} from "./components/todo/Todo";
@@ -11,6 +11,7 @@ import {EditTodoForm} from "./components/edit-todo-form/EditTodoForm";
 const App = () => {
 
     //todo зроюити редагування todo
+
     const [isEditForm, setIsEditForm] = useState('');
 
     const [isLoading, setIsLoading] = useState(false);
@@ -25,14 +26,16 @@ const App = () => {
         try {
             setIsLoading(true);
             const todos = await getTodos();
-            console.log(todos);
             dispatch(setTodos({todos}));
         } catch (e) {
             console.log(e);
         } finally {
-            console.log('sss');
             setIsLoading(false);
         }
+    }
+
+    const update = (id, data) => {
+        updateTodo(id, data)
     }
 
 
@@ -48,8 +51,9 @@ const App = () => {
     return (
         <div>
             <TodoCreateForm/>
-            { isEditForm && <EditTodoForm/> }
-            <TodoList setIsEditForm={ setIsEditForm } todos={ todos }/>
+            { isEditForm &&
+            <EditTodoForm fetchData={ fetchData } setIsEditForm={ setIsEditForm } updateTodo={ update }/> }
+            <TodoList fetchData={ fetchData } setIsEditForm={ setIsEditForm } todos={ todos }/>
         </div>
     );
 }

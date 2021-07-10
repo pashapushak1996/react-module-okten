@@ -1,11 +1,16 @@
 //Action types
+import {updateTodo} from "../services";
+
 const SET_TODOS = "SET_TODOS";
 const SET_TODO = "SET_TODO";
+const UPDATE_TODO = "UPDATE_TODO";
+const TODO_COMPLETE = "TODO_COMPLETE";
 
 //Action creators
 export const setTodos = (payload) => ({type: SET_TODOS, payload});
 export const setTodo = (payload) => ({type: SET_TODO, payload});
-
+export const updateTodoAction = (payload) => ({type: UPDATE_TODO, payload});
+export const todoComplete = (payload) => ({type: TODO_COMPLETE, payload});
 
 const initialState = {
     todos: [],
@@ -26,7 +31,26 @@ export const reducer = (state = initialState, action) => {
                 ...state, todo: action.payload
             }
         }
+        case TODO_COMPLETE: {
+            return {
+                ...state, todos: [...state.todos.map((todo) => {
+                    if (todo.id === action.payload.id) {
+                        return {...action.payload.updatedTodo}
+                    }
+                    return {...todo};
+                })]
+            }
+        }
         default:
             return state;
     }
+};
+
+//Thunk
+
+export const todoSuccess = (checked, id) => async (dispatch) => {
+    const updatedTodo = await updateTodo(id, {
+        completed: checked
+    });
+    dispatch(todoComplete({id, updatedTodo}));
 };

@@ -30,6 +30,7 @@ const updateTodo = async (id, data) => {
             "Content-Type": "application/json"
         }
     });
+
     return await response.json();
 };
 

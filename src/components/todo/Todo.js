@@ -1,7 +1,9 @@
 import {useState} from "react";
 import {deleteTodo, getTodoById, getTodos} from "../../services";
 import {useDispatch} from "react-redux";
-import {setTodo, setTodos} from "../../redux/reducer";
+import {setTodo, setTodos, todoSuccess} from "../../redux/reducer";
+import styles from './Todo.module.css';
+
 
 export const Todo = ({todo, setIsEditForm}) => {
     const dispatch = useDispatch();
@@ -13,14 +15,17 @@ export const Todo = ({todo, setIsEditForm}) => {
         const todos = await getTodos();
         dispatch(setTodos({todos}));
     }
-    const editUser = async () => {
+
+
+    const editTodo = async () => {
         setIsEditForm(true);
         const todoById = await getTodoById(todo.id);
         dispatch(setTodo(todoById));
     }
 
+
     return (
-        <div key={ todo.id }>
+        <div key={ todo.id } className={ todo.completed ? [styles.checked, styles.success].join(' ') : '' }>
             <div>
                 <b>Title:</b>
                 <span>{ todo.title }</span>
@@ -34,14 +39,15 @@ export const Todo = ({todo, setIsEditForm}) => {
                 <span>{ new Date(todo.createdAt).toDateString() }</span>
             </div>
             <input type="checkbox" onChange={ ({target: {checked}}) => {
-                setChecked(checked)
-            } } value={ checked }/>
+                setChecked(checked);
+                dispatch(todoSuccess(checked, todo.id));
+            } } checked={ checked }/>
             <button onClick={ () => {
                 todoDelete(todo.id);
             } }>Delete todo
             </button>
             <button onClick={ () => {
-                editUser();
+                editTodo();
             } }>
                 Edit todo
             </button>
