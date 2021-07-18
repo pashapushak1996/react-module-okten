@@ -37,8 +37,20 @@ export const reducer = (state = initialState, action) => {
                     if (todo.id === action.payload.id) {
                         return {...action.payload.updatedTodo}
                     }
-                    return {...todo};
+                    return todo;
                 })]
+            }
+        }
+        case UPDATE_TODO: {
+            return {
+                ...state, todos: [...state.todos.reduce((acc, curr) => {
+                    if (curr.id === action.payload.id) {
+                        acc.push({...action.payload.updatedTodo});
+                        return acc;
+                    }
+                    acc.push(curr);
+                    return acc;
+                }, [])]
             }
         }
         default:
@@ -47,6 +59,10 @@ export const reducer = (state = initialState, action) => {
 };
 
 //Thunk
+export const updateTodoById = (id, data) => async (dispatch) => {
+    const updatedTodo = await updateTodo(id, {...data});
+    dispatch(updateTodoAction({id, updatedTodo}));
+};
 
 export const todoSuccess = (checked, id) => async (dispatch) => {
     const updatedTodo = await updateTodo(id, {

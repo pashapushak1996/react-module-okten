@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {deleteTodo, getTodoById, getTodos} from "../../services";
 import {useDispatch} from "react-redux";
 import {setTodo, setTodos, todoSuccess} from "../../redux/reducer";
@@ -6,7 +6,10 @@ import styles from './Todo.module.css';
 
 
 export const Todo = ({todo, setIsEditForm}) => {
+
     const dispatch = useDispatch();
+
+
     const [checked, setChecked] = useState(todo.completed);
 
     const todoDelete = async (todoId) => {
@@ -14,14 +17,24 @@ export const Todo = ({todo, setIsEditForm}) => {
         alert(message.replace(' ', ` ${ todo.title } `))
         const todos = await getTodos();
         dispatch(setTodos({todos}));
-    }
+    };
+
+    const successTodo = (checked) => {
+        setChecked(checked);
+        dispatch(todoSuccess(checked, todo.id));
+    };
 
 
     const editTodo = async () => {
         setIsEditForm(true);
         const todoById = await getTodoById(todo.id);
         dispatch(setTodo(todoById));
-    }
+    };
+
+
+    useEffect(() => {
+        setChecked(todo.completed);
+    }, [todo.completed])
 
 
     return (
@@ -38,17 +51,14 @@ export const Todo = ({todo, setIsEditForm}) => {
                 <b>Created:</b>
                 <span>{ new Date(todo.createdAt).toDateString() }</span>
             </div>
-            <input type="checkbox" onChange={ ({target: {checked}}) => {
-                setChecked(checked);
-                dispatch(todoSuccess(checked, todo.id));
-            } } checked={ checked }/>
-            <button onClick={ () => {
-                todoDelete(todo.id);
-            } }>Delete todo
+            <input type="checkbox"
+                   onChange={ ({target: {checked}}) => successTodo(checked) }
+                   checked={ checked }/>
+
+            <button onClick={ () => todoDelete(todo.id) }>
+                Delete todo
             </button>
-            <button onClick={ () => {
-                editTodo();
-            } }>
+            <button onClick={ () => editTodo() }>
                 Edit todo
             </button>
             <hr/>
